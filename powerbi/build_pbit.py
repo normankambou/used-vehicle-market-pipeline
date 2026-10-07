@@ -449,7 +449,7 @@ def to_bytes(obj):
 
 with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
     z.writestr("[Content_Types].xml",  CONTENT_TYPES)
-    z.writestr("Version",              "3.0")
+    z.writestr("Version",              "3.0".encode('utf-16-le'))  # PBI reads Version as UTF-16 LE
     z.writestr("DataModelSchema",      to_bytes(DATA_MODEL_SCHEMA))
     z.writestr("DiagramLayout",        to_bytes(DIAGRAM_LAYOUT))
     z.writestr("Report/Layout",        to_bytes(REPORT_LAYOUT))
