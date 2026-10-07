@@ -1,0 +1,13 @@
+{
+  "version": "1.0",
+  "type": "pbix",
+  "model": {
+    "format": "TMDL"
+  },
+  "report": {
+    "customVisuals": []
+  },
+  "queries": {
+    "generateDataSources": false
+  }
+}

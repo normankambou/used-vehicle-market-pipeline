@@ -4,7 +4,7 @@ An end-to-end AWS data pipeline analyzing pricing dynamics, regional demand, and
 
 ## Architecture
 
-Raw Data (S3) → AWS Glue ETL (PySpark) → Transformed Data (S3/Parquet) → Athena (SQL) → Tableau Dashboard
+Raw Data (S3) → AWS Glue ETL (PySpark) → Transformed Data (S3/Parquet) → Athena (SQL) → Power BI Dashboard
 
 **Three-zone S3 structure:**
 - `raw/` — original Craigslist dataset, untouched
@@ -40,14 +40,18 @@ boto3 + pandas notebook that executes all 8 business queries against Athena and 
 - Outlier z-score strip plot
 - Duplicate analysis charts
 
-Charts are saved to `charts/` for use in presentations or the Tableau workbook.
+Charts are saved to `charts/` for use in presentations or the Power BI dashboard.
 
-### Tableau Dashboard
-4-chart dashboard connected to Athena query outputs:
-- Price depreciation curves by manufacturer
-- Regional demand ranked by state
-- Deal depth by state (discount depth, not just volume)
-- Condition premium by manufacturer
+### Power BI Dashboard (`powerbi/UsedVehicleMarket.pbit`)
+4-page interactive dashboard built on the 8 business query outputs:
+- **Depreciation & Value** — multi-line depreciation curves by manufacturer + data table
+- **Deal Finder** — sweet spot matrix (age × mileage) + deal quality bar chart
+- **Regional Intelligence** — arbitrage bar chart (% vs national median) + inventory/price scatter
+- **Inventory Quality** — condition premium column chart + outlier z-score table + duplicate listings bar
+
+Built as a Power BI Template (`.pbit`) using `powerbi/build_pbit.py` — runs `powerbi/export_data.py` first to pull fresh query results from Athena to `powerbi/data/`, then `build_pbit.py` packages the model + report into the template file.
+
+**Tech:** Power BI Desktop, Power Query M, DAX-compatible tabular model, Amazon Athena ODBC + CSV export path
 
 ## Key Findings
 - **366,739 clean records** processed from ~400k raw listings
@@ -89,8 +93,8 @@ Eight additional Athena queries go beyond descriptive stats to answer operationa
 - **AWS Glue** — managed PySpark ETL
 - **AWS Athena** — serverless SQL query layer
 - **Apache Spark / PySpark** — distributed data transformation
-- **Tableau** — business intelligence dashboard
-- **Python** — pipeline scripting
+- **Power BI Desktop** — interactive 4-page dashboard (.pbit template)
+- **Python** — pipeline scripting + PBIT build tooling
 
 ## Dataset
 Craigslist Used Cars dataset via Kaggle (~400k listings, 1.4GB)

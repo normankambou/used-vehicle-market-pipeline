@@ -1,0 +1,54 @@
+table 'Q1_Depreciation'
+	lineageTag: 5b6e876f-4dd5-40c0-9984-1484bfcda5dd
+
+	column 'manufacturer'
+		dataType: string
+		lineageTag: 7b0316ea-71e3-43e1-b845-d09cd637a3a0
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column 'age_bracket'
+		dataType: string
+		lineageTag: 7c3e2c53-0326-4c14-942c-2c40b6574404
+		summarizeBy: none
+		sourceColumn: age_bracket
+
+	column 'listing_count'
+		dataType: int64
+		lineageTag: 94d9b3f8-571f-419b-87ed-854a59ff3c6a
+		summarizeBy: sum
+		sourceColumn: listing_count
+		formatString: #,0
+
+	column 'avg_price'
+		dataType: double
+		lineageTag: 6b193d15-8b96-4cf3-b6ab-bc1bc4c6f6bc
+		summarizeBy: average
+		sourceColumn: avg_price
+		formatString: \$#,0
+
+	column 'pct_of_benchmark'
+		dataType: double
+		lineageTag: d22f62ed-1e57-41ce-b69b-cbf45697c7fe
+		summarizeBy: average
+		sourceColumn: pct_of_benchmark
+		formatString: 0.0
+
+	column 'avg_price_per_mile'
+		dataType: double
+		lineageTag: 14c31f6e-e683-4871-b041-619321d016be
+		summarizeBy: average
+		sourceColumn: avg_price_per_mile
+		formatString: 0.0000
+
+	partition 'Q1_Depreciation-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q1_depreciation.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"manufacturer", type text}, {"age_bracket", type text}, {"listing_count", Int64.Type}, {"avg_price", type number}, {"pct_of_benchmark", type number}, {"avg_price_per_mile", type number}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

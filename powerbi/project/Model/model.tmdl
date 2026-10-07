@@ -1,0 +1,11 @@
+model Model
+	culture: en-US
+
+	ref table Q1_Depreciation
+	ref table Q2_SweetSpot
+	ref table Q3_Arbitrage
+	ref table Q4_Condition
+	ref table Q5_MarketConcentration
+	ref table Q6_DealQuality
+	ref table Q7_Outliers
+	ref table Q8_Duplicates

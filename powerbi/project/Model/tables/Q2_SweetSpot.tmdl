@@ -1,0 +1,61 @@
+table 'Q2_SweetSpot'
+	lineageTag: 968b17d5-7de4-4d27-9812-d384cf978a80
+
+	column 'age_bracket'
+		dataType: string
+		lineageTag: 65516404-eedc-4839-a86a-f1cd1b225256
+		summarizeBy: none
+		sourceColumn: age_bracket
+
+	column 'mileage_bucket'
+		dataType: string
+		lineageTag: e3116758-0cf8-4034-b26c-b862cbffe691
+		summarizeBy: none
+		sourceColumn: mileage_bucket
+
+	column 'listing_count'
+		dataType: int64
+		lineageTag: 8811f599-4440-419d-9a18-e3bb6a562de4
+		summarizeBy: sum
+		sourceColumn: listing_count
+		formatString: #,0
+
+	column 'avg_price'
+		dataType: double
+		lineageTag: 72378512-80cf-44e9-82f2-8333e00327c0
+		summarizeBy: average
+		sourceColumn: avg_price
+		formatString: \$#,0
+
+	column 'avg_pct_of_benchmark'
+		dataType: double
+		lineageTag: bdfdef8d-c8e9-4db2-b943-232f6d719175
+		summarizeBy: average
+		sourceColumn: avg_pct_of_benchmark
+		formatString: 0.0
+
+	column 'great_deal_count'
+		dataType: int64
+		lineageTag: cb753808-52e6-4a10-bba1-a55d16871270
+		summarizeBy: sum
+		sourceColumn: great_deal_count
+		formatString: #,0
+
+	column 'great_deal_pct'
+		dataType: double
+		lineageTag: 0954af62-cd1e-4ed9-824b-648d0bc1197a
+		summarizeBy: average
+		sourceColumn: great_deal_pct
+		formatString: 0.0
+
+	partition 'Q2_SweetSpot-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q2_sweet_spot.csv"), [Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"age_bracket", type text}, {"mileage_bucket", type text}, {"listing_count", Int64.Type}, {"avg_price", type number}, {"avg_pct_of_benchmark", type number}, {"great_deal_count", Int64.Type}, {"great_deal_pct", type number}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

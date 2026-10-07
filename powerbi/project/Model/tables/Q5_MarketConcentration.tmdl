@@ -1,0 +1,69 @@
+table 'Q5_MarketConcentration'
+	lineageTag: 22f115c7-749e-4242-90e6-21a1cb8d4303
+
+	column 'state'
+		dataType: string
+		lineageTag: 40b3b37b-7b94-41ac-aab8-ee478312a269
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'total_listings'
+		dataType: int64
+		lineageTag: 7f82c94d-91b3-42eb-819c-67ad370dc86e
+		summarizeBy: sum
+		sourceColumn: total_listings
+		formatString: #,0
+
+	column 'avg_price'
+		dataType: double
+		lineageTag: b86e376f-2e30-4c02-8ece-ce558ece1e4d
+		summarizeBy: average
+		sourceColumn: avg_price
+		formatString: \$#,0
+
+	column 'median_price'
+		dataType: double
+		lineageTag: b9cad07c-5699-476f-97cf-30fb8a58e6b1
+		summarizeBy: average
+		sourceColumn: median_price
+		formatString: \$#,0
+
+	column 'great_deals'
+		dataType: int64
+		lineageTag: e389823d-bc76-4242-b02e-1a6f909117d7
+		summarizeBy: sum
+		sourceColumn: great_deals
+		formatString: #,0
+
+	column 'great_deal_pct'
+		dataType: double
+		lineageTag: fc8a5fab-0946-4f59-b583-9df4445ba3b7
+		summarizeBy: average
+		sourceColumn: great_deal_pct
+		formatString: 0.0
+
+	column 'inventory_rank'
+		dataType: int64
+		lineageTag: f596952d-b109-4339-b30d-80e3929967fc
+		summarizeBy: none
+		sourceColumn: inventory_rank
+		formatString: #,0
+
+	column 'price_rank'
+		dataType: int64
+		lineageTag: f248ef51-59af-4d6d-bcbd-709f013b160a
+		summarizeBy: none
+		sourceColumn: price_rank
+		formatString: #,0
+
+	partition 'Q5_MarketConcentration-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q5_market_concentration.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"state", type text}, {"total_listings", Int64.Type}, {"avg_price", type number}, {"median_price", type number}, {"great_deals", Int64.Type}, {"great_deal_pct", type number}, {"inventory_rank", Int64.Type}, {"price_rank", Int64.Type}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

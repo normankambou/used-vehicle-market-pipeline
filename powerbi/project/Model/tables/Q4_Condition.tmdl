@@ -1,0 +1,47 @@
+table 'Q4_Condition'
+	lineageTag: 15515c2b-5b15-4970-9f2a-b4cf0e988897
+
+	column 'manufacturer'
+		dataType: string
+		lineageTag: c633101e-c21a-40a5-985e-ba7163715176
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column 'condition'
+		dataType: string
+		lineageTag: de6e5f0a-2d25-4290-9978-1f35b9524986
+		summarizeBy: none
+		sourceColumn: condition
+
+	column 'listing_count'
+		dataType: int64
+		lineageTag: bdb61155-6e83-47c7-a635-7f2bbfb6a70b
+		summarizeBy: sum
+		sourceColumn: listing_count
+		formatString: #,0
+
+	column 'avg_price'
+		dataType: double
+		lineageTag: a083a13a-5c28-49a1-87f5-7b6a6e8cc83a
+		summarizeBy: average
+		sourceColumn: avg_price
+		formatString: \$#,0
+
+	column 'pct_of_make_avg'
+		dataType: double
+		lineageTag: dcaae32a-1fbf-43b6-b3da-22cac4085ee8
+		summarizeBy: average
+		sourceColumn: pct_of_make_avg
+		formatString: 0.0
+
+	partition 'Q4_Condition-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q4_condition.csv"), [Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"manufacturer", type text}, {"condition", type text}, {"listing_count", Int64.Type}, {"avg_price", type number}, {"pct_of_make_avg", type number}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,73 @@
+table 'Q7_Outliers'
+	lineageTag: 3430b4df-1b2d-4b24-bae1-99444fc36a26
+
+	column 'manufacturer'
+		dataType: string
+		lineageTag: de8da7be-8b5f-495a-87d3-8bda8328657d
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column 'state'
+		dataType: string
+		lineageTag: e72c6884-ed9e-4460-a12e-19515d75dfb1
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'price'
+		dataType: double
+		lineageTag: 207fe894-6074-41d3-bf4b-a3069f8f81a8
+		summarizeBy: average
+		sourceColumn: price
+		formatString: \$#,0
+
+	column 'condition'
+		dataType: string
+		lineageTag: e37226fb-1a77-4e69-ab34-815ca48ab19b
+		summarizeBy: none
+		sourceColumn: condition
+
+	column 'vehicle_age'
+		dataType: double
+		lineageTag: 49bbd93b-2d0e-4d0d-acd8-ffb2c3a51d36
+		summarizeBy: average
+		sourceColumn: vehicle_age
+		formatString: 0
+
+	column 'odometer'
+		dataType: double
+		lineageTag: 42cbc33c-8274-4d22-b9bd-7cd6a875a42b
+		summarizeBy: average
+		sourceColumn: odometer
+		formatString: #,0
+
+	column 'cohort_avg_price'
+		dataType: double
+		lineageTag: 21cd1427-289d-435f-8d18-f355329f10f8
+		summarizeBy: average
+		sourceColumn: cohort_avg_price
+		formatString: \$#,0
+
+	column 'z_score'
+		dataType: double
+		lineageTag: f55d5011-e53e-49ab-bffc-33ef1d547089
+		summarizeBy: average
+		sourceColumn: z_score
+		formatString: 0.00
+
+	column 'outlier_flag'
+		dataType: string
+		lineageTag: 097fd144-54df-4811-bfba-c2c43b7560f6
+		summarizeBy: none
+		sourceColumn: outlier_flag
+
+	partition 'Q7_Outliers-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q7_outliers.csv"), [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"manufacturer", type text}, {"state", type text}, {"price", type number}, {"condition", type text}, {"vehicle_age", type number}, {"odometer", type number}, {"cohort_avg_price", type number}, {"z_score", type number}, {"outlier_flag", type text}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

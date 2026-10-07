@@ -1,0 +1,54 @@
+table 'Q3_Arbitrage'
+	lineageTag: f5b2004b-1e76-4e3e-8a91-94d3252d2227
+
+	column 'state'
+		dataType: string
+		lineageTag: 95ad4025-5ff0-4640-9fe6-0a4dc0431f00
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'manufacturer'
+		dataType: string
+		lineageTag: af4d6192-2262-4d23-a688-d5ca415717d0
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column 'state_avg_price'
+		dataType: double
+		lineageTag: 79b204dd-46bf-48b8-8dd7-0f062dedc47b
+		summarizeBy: average
+		sourceColumn: state_avg_price
+		formatString: \$#,0
+
+	column 'national_median_price'
+		dataType: double
+		lineageTag: 833af7c0-80f5-4f99-ab2b-6373d3a530a0
+		summarizeBy: average
+		sourceColumn: national_median_price
+		formatString: \$#,0
+
+	column 'pct_vs_national'
+		dataType: double
+		lineageTag: 73486ef0-f83f-46bb-ac75-7d803737350d
+		summarizeBy: average
+		sourceColumn: pct_vs_national
+		formatString: 0.0
+
+	column 'state_count'
+		dataType: int64
+		lineageTag: 36bf1015-820c-47a0-9ce7-64667e12b7a5
+		summarizeBy: sum
+		sourceColumn: state_count
+		formatString: #,0
+
+	partition 'Q3_Arbitrage-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q3_arbitrage.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"state", type text}, {"manufacturer", type text}, {"state_avg_price", type number}, {"national_median_price", type number}, {"pct_vs_national", type number}, {"state_count", Int64.Type}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

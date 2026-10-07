@@ -1,0 +1,53 @@
+table 'Q8_Duplicates'
+	lineageTag: c45ade51-872d-4141-b2c4-9f0110df1691
+
+	column 'price'
+		dataType: double
+		lineageTag: 6030e292-c672-4f33-9fcb-e1ddebedd9fa
+		summarizeBy: average
+		sourceColumn: price
+		formatString: \$#,0
+
+	column 'manufacturer'
+		dataType: string
+		lineageTag: ccb0194e-ad5a-4aed-b345-6a07ad68ec4f
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column 'model'
+		dataType: string
+		lineageTag: 30a85172-5a40-4ca9-85ec-0c5de6ca9faa
+		summarizeBy: none
+		sourceColumn: model
+
+	column 'odometer'
+		dataType: double
+		lineageTag: 05a5916d-da43-49a1-88c8-a7f79e4438f9
+		summarizeBy: average
+		sourceColumn: odometer
+		formatString: #,0
+
+	column 'state'
+		dataType: string
+		lineageTag: 36818c87-d6ae-4bcb-9e0b-1d87057b0ca5
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'duplicate_count'
+		dataType: int64
+		lineageTag: 44a8c7c4-07f4-45d5-acc3-ebc758bdb17e
+		summarizeBy: sum
+		sourceColumn: duplicate_count
+		formatString: #,0
+
+	partition 'Q8_Duplicates-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q8_duplicates.csv"), [Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"price", type number}, {"manufacturer", type text}, {"model", type text}, {"odometer", type number}, {"state", type text}, {"duplicate_count", Int64.Type}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table

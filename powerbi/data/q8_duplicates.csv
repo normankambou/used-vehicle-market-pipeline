@@ -1,0 +1,31 @@
+price,manufacturer,model,odometer,state,duplicate_count
+500.0,NISSAN,altima,130000.0,CA,104
+100.0,JEEP,wrangler,100000.0,OH,53
+38885.0,CHEVROLET,2500,151913.0,TX,39
+49998.0,FORD,f250 lariat 4x4 diesel,160867.0,TX,38
+32999.0,CHEVROLET,2500,186676.0,TX,38
+44900.0,RAM,2500 longhorn mega 4x4,152034.0,TX,38
+39950.0,PORSCHE,macan turbo awd crossove,53321.0,OTHER,35
+15301.0,BMW,3 series,32359.0,OTHER,34
+11998.0,LEXUS,ls 460 lwb,169194.0,OTHER,34
+29950.0,FORD,f-150 king ranch 4x4 ecoboo,79752.0,OTHER,34
+12998.0,CHEVROLET,equinox lt,168635.0,OTHER,33
+30900.0,CHEVROLET,silverado 1500,113000.0,OTHER,33
+63995.0,FORD,f-250 superduty lifted stx 8ft 6.7l diesel,21240.0,OTHER,33
+38900.0,CHEVROLET,silverado 2500hd,132000.0,OTHER,33
+7950.0,BMW,330xi xdrive awd sport sedan,159399.0,OTHER,33
+9998.0,SUBARU,outback,154817.0,OTHER,32
+53900.0,GMC,sierra 2500hd,95000.0,OTHER,32
+25998.0,TOYOTA,camry,27056.0,OTHER,32
+47999.0,FORD,f350,111536.0,TX,32
+5998.0,GMC,yukon xl,176146.0,OTHER,32
+43900.0,FORD,super duty f-250 srw,118000.0,OTHER,32
+1.0,JEEP,wrangler unlimited,57722.0,FL,31
+25997.0,TOYOTA,"""tundra sr5 4dr double cab 1-owner*rust free*only 112k miles*new water pump & timing belt*new bilstein-toytec lift*new 33"""" yokohama tires*like new in&out*0-accidents""",112215.0,OTHER,31
+42900.0,FORD,super duty f-250 srw,145000.0,OTHER,31
+34998.0,RAM,2500,200169.0,TX,31
+36900.0,CHEVROLET,tahoe,98000.0,OTHER,31
+46900.0,CHEVROLET,silverado 3500hd,138000.0,OTHER,31
+388.0,DODGE,neon,150000.0,CT,30
+37900.0,CHEVROLET,silverado 1500,23000.0,OTHER,30
+388.0,MERCURY,sable,150000.0,CT,30

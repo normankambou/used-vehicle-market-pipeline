@@ -1,0 +1,68 @@
+table 'Q6_DealQuality'
+	lineageTag: 8459ef39-f56b-4bc0-b67c-9c6476a59825
+
+	column 'manufacturer'
+		dataType: string
+		lineageTag: d6d261fe-7e52-4e1f-ae68-23095c0017dc
+		summarizeBy: none
+		sourceColumn: manufacturer
+
+	column 'state'
+		dataType: string
+		lineageTag: f82889b0-71d3-47be-a911-9b146eb9054c
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'total_listings'
+		dataType: int64
+		lineageTag: a71e7472-9df1-4ea9-be5a-0ad66cb1e6ce
+		summarizeBy: sum
+		sourceColumn: total_listings
+		formatString: #,0
+
+	column 'great_deals'
+		dataType: int64
+		lineageTag: 731a578b-b604-46a0-9537-d7d5e5b12fa0
+		summarizeBy: sum
+		sourceColumn: great_deals
+		formatString: #,0
+
+	column 'good_deals'
+		dataType: int64
+		lineageTag: 95cb0eea-a85e-4ebc-85af-a7ec770a30f9
+		summarizeBy: sum
+		sourceColumn: good_deals
+		formatString: #,0
+
+	column 'fair_deals'
+		dataType: int64
+		lineageTag: d72d05d0-34dc-4305-88de-1790a7a4d746
+		summarizeBy: sum
+		sourceColumn: fair_deals
+		formatString: #,0
+
+	column 'overpriced'
+		dataType: int64
+		lineageTag: 63e7a0fb-1100-4d38-a88c-a26d3b037352
+		summarizeBy: sum
+		sourceColumn: overpriced
+		formatString: #,0
+
+	column 'pct_good_or_better'
+		dataType: double
+		lineageTag: 14c1393c-72a5-45e0-b7de-ed2073a3afdc
+		summarizeBy: average
+		sourceColumn: pct_good_or_better
+		formatString: 0.0
+
+	partition 'Q6_DealQuality-Partition' = m
+		mode: import
+		source
+			let
+			    Source = Csv.Document(File.Contents("C:\\Users\\norma\\used-vehicle-market-pipeline\\powerbi\\data\\q6_deal_quality.csv"), [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+			    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+			    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{"manufacturer", type text}, {"state", type text}, {"total_listings", Int64.Type}, {"great_deals", Int64.Type}, {"good_deals", Int64.Type}, {"fair_deals", Int64.Type}, {"overpriced", Int64.Type}, {"pct_good_or_better", type number}})
+			in
+			    #"Changed Type"
+
+	annotation PBI_ResultType = Table
