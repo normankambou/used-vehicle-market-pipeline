@@ -34,19 +34,19 @@ def partition(table_name, m_expr):
     }
 
 def m_query(csv_file, columns):
-    """Build a Power Query M expression that loads a CSV file."""
+    """Build a Power Query M expression (array format required by PBI Desktop)."""
     col_pairs = ", ".join(f'{{"{n}", {t}}}' for n, t in columns)
     n_cols    = len(columns)
     csv_path  = os.path.join(DATA, csv_file).replace("\\", "\\\\")
-    return (
-        f'let\n'
+    return [
+        "let",
         f'    Source = Csv.Document(File.Contents("{csv_path}"), '
-        f'[Delimiter=",", Columns={n_cols}, Encoding=65001, QuoteStyle=QuoteStyle.None]),\n'
-        f'    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),\n'
-        f'    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{{col_pairs}}})\n'
-        f'in\n'
-        f'    #"Changed Type"'
-    )
+        f'[Delimiter=",", Columns={n_cols}, Encoding=65001, QuoteStyle=QuoteStyle.None]),',
+        f'    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),',
+        f'    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers", {{{col_pairs}}})',
+        "in",
+        '    #"Changed Type"'
+    ]
 
 def table(name, cols_def, csv_file, m_cols):
     return {
@@ -198,9 +198,10 @@ TABLES = [
 # ── DataModelSchema ───────────────────────────────────────────────────────────
 
 DATA_MODEL_SCHEMA = {
-    "name": "UsedVehicleMarket",
+    "name": "SemanticModel",
     "compatibilityLevel": 1550,
     "model": {
+        "name": "Model",
         "culture": "en-US",
         "dataAccessOptions": {
             "legacyRedirects": True,
